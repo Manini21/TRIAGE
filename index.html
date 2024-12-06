@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Injury Detection Questionnaire</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="questionnaire-container">
+    <h1>Injury Detection Questionnaire</h1>
+    <p id="description">Answer the questions to help identify possible injuries.</p>
+    
+    <div id="question-container">
+      <h2 id="question">Do you feel pain anywhere in your body?</h2>
+      <div class="options">
+        <button class="btn" onclick="handleAnswer('yes')">Yes</button>
+        <button class="btn" onclick="handleAnswer('no')">No</button>
+      </div>
+    </div>
+
+    <p class="result" id="result"></p>
+  </div>
+  
+  <script>
+    // Question flow logic
+    const questions = [
+      {
+        text: "Do you feel pain anywhere in your body?",
+        yes: "Is the pain localized in your head?",
+        no: "Do you have any other symptoms, like fever or fatigue?",
+        nextYes: 1,
+        nextNo: 2
+      },
+      {
+        text: "Is the pain localized in your head?",
+        yes: "Do you feel dizziness or blurred vision?",
+        no: "Is the pain in your chest or abdomen?",
+        nextYes: 3,
+        nextNo: 4
+      },
+      {
+        text: "Do you have any other symptoms, like fever or fatigue?",
+        yes: "You might have a systemic issue. Consider consulting a doctor.",
+        no: "No significant injuries detected. Stay healthy!",
+        result: true
+      },
+      {
+        text: "Do you feel dizziness or blurred vision?",
+        yes: "You might have a concussion. Seek immediate medical attention.",
+        no: "You may have a mild headache. Rest and hydrate.",
+        result: true
+      },
+      {
+        text: "Is the pain in your chest or abdomen?",
+        yes: "You might have an internal injury. Please visit a healthcare professional.",
+        no: "No critical symptoms detected. Monitor your condition closely.",
+        result: true
+      }
+    ];
+
+    let currentQuestionIndex = 0;
+
+    function handleAnswer(answer) {
+      const currentQuestion = questions[currentQuestionIndex];
+      if (currentQuestion.result) {
+        document.getElementById("result").textContent = currentQuestion[answer];
+        document.getElementById("question-container").style.display = "none";
+        return;
+      }
+      
+      currentQuestionIndex = answer === "yes" ? currentQuestion.nextYes : currentQuestion.nextNo;
+      const nextQuestion = questions[currentQuestionIndex];
+      document.getElementById("question").textContent = nextQuestion.text;
+    }
+  </script>
+</body>
+</html>
